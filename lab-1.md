@@ -1,4 +1,4 @@
-#Lab-1: Implementing basic tensor operators on GPUs.
+# Lab-1: Implementing basic tensor operators on GPUs.
 
 The goal of this lab is two-fold. One, we want to demonstrate the abstraction of tensors and tensor operations.
 Two, we want you to become familiar with GPU programming so as to implement the tensor operations.
