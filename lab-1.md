@@ -29,7 +29,8 @@ the `make` tool to compile our code.
 
 ## Correctness
 Correctness will constitute 70% of Lab-1's score. 
-We will evaluate the correctness of your Lab-1 using a simple unit test file `test.cu`.  Once you finish compilation, 
+We will evaluate the correctness of your Lab-1 using a simple unit test file `test.cu`.  You need a GPU in order to run the test! 
+Once you finish compilation, 
 run the unit test as follows:
 
 ```
