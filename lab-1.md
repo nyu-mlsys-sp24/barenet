@@ -58,10 +58,22 @@ In Lab-1, you will complete the necessary code in `op_elemwise.cuh`, `op_mm.cuh`
 simple unit tests. Your implementation should also be performant in order to get good performance scores.
 
 You should first carefully read through the code in `utils/tensor.cuh`. This file defines our tensor abstraction. 
+Here are the things you should know about our tensors:
 
-For our labs, the tensor is *always* 2-dimensional, with the first dimension named `h` (height) and second dimension named `w` (width).
+- The tensor is templated so that we can have different data types for the elements stored in it.
+
+- The tensor's internal buffer is ref-counted using C++ smart pointer and its corresponding memory storage is automatically freed when there are no more references to it.
+In other words, you do not need to worry about needing to free the memory.
+
+- For our labs, the tensor is *always* 2-dimensional, with the first dimension named `h` (height) and second dimension named `w` (width).
 A row vector has `h=1` and a column vector has `w=1`.
 
+- The Macro `Index(t, i,j)` will  be handy for accessing the element at [i,j] coordinate of tensor t. The Macro `IndexOutOfBound(t, i, j)` will be handy for testing whether [i,j] is out of bound for tensor t.
 
+
+Next, complete the necessary functions  in `op_elemwise.cuh`, `op_mm.cuh` and `op_reduction.cuh`, in the given order.
+Read through the code skeleton, and fill in your code whenever you see a comment that says `Lab-1: please add your code here`.
+After finishing each file, you should be able to pass a portion of the unit test. Debug and complete that portion of the unit test 
+before moving on to the next lab file.
 
 
