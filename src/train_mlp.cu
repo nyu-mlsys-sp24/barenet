@@ -28,7 +28,6 @@ void train(int epochs, int batch_size, int hidden_dim, int n_layers, bool on_gpu
     MNIST mnist_test{"../data/MNIST/raw", MNIST::Mode::kTest};
     
     std::cout << "# of data points=" << mnist_train.images.h << " feature size=" << mnist_train.images.w << std::endl;
-    std::cout << "all datapoints mean=" << mnist_train.images.mean() << std::endl;
 
     std::vector<int> layer_dims;
     for (int i = 0; i < n_layers - 1; i++)

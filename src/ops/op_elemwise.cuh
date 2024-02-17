@@ -166,6 +166,8 @@ void op_elemwise_unary_gpu(OpFunc f, const Tensor<T> &t, Tensor<T> &out)
 {
   //Lab-1:add your code here. Somewhere in this function, 
   //you need to call op_elemwise_unary_kernel<<<???, ???>>>(f, t, out);
+  //delete assert(0) when you are done
+  assert(0);
 }
 
 //This is the GPU kernel function for performing element wise operation with 
@@ -194,6 +196,9 @@ void op_elemwise_binary_w_bcast_gpu(OpFunc f, const Tensor<AT> &in1, const Tenso
 {
     //Lab-1: add your code here. Somewhere in this function
    //you need to call op_elemwise_binary_w_bcast_kernel<<<???, ???>>>(f, in1, in2, out);
+   //delete assert(0) when you are done
+    assert(0);
+
 }
 
 /*----------------------- tensor operators-----------------------*/
@@ -328,7 +333,11 @@ void op_const_init(Tensor<T> &t, float init_val)
     if (t.on_device) {
         op_elemwise_unary_gpu(f, t, t);
     } else {
-      assert(0);
+        for (int i = 0; i < t.h; i++) {
+            for (int j = 0; j < t.w; j++) {
+                Index(t, i, j) = init_val;
+            }
+        }
     }
 }
 
@@ -362,8 +371,18 @@ bool op_allclose(const Tensor<T> &at, Tensor<T> &bt)
     {
         return false;
     }
-    Tensor<T> att = at.toHost();
-    Tensor<T> btt = bt.toHost();
+    Tensor<T> att;
+    if (at.on_device) {
+        att =  at.toHost();
+    } else {
+        att = at;
+    }
+    Tensor<T> btt;
+    if (bt.on_device) {
+        btt = bt.toHost();
+    } else {
+        btt = bt;
+    }
     for (int i = 0; i < at.h; i++)
     {
         for (int j = 0; j < at.w; j++)

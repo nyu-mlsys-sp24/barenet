@@ -22,6 +22,7 @@ struct cudaDeleter
   {
     if (p != nullptr)
     {
+      // std::cout << "Free p=" << p << std::endl;
       cudaFree(p);
     }
   }
@@ -34,6 +35,7 @@ struct cpuDeleter
   {
     if (p != nullptr)
     {
+      // std::cout << "Free p=" << p << std::endl;
       free(p);
     }
   }
@@ -63,23 +65,29 @@ public:
     if (on_device_)
     {
       cudaAssert(cudaMalloc(&rawp, sizeof(T) * h * w));
+      // std::cout << "cudaMalloc p=" << rawp << std::endl;
       ref = std::shared_ptr<T>(rawp, cudaDeleter<T>());
     }
     else
     {
       rawp = (T *)malloc(sizeof(T) * h * w);
+      //std::cout << "malloc p=" << rawp << " h=" << h << " w=" << w << std::endl;
       ref = std::shared_ptr<T>(rawp, cpuDeleter<T>());
     }
   }
 
   void toHost(Tensor<T> &out) const
   {
-    assert(on_device && !out.on_device);
+    assert(!out.on_device);
     assert(h == out.h && w == out.w);
+    if (!on_device) {
+      out = *this;
+      return;
+    }
     out.offset = offset;
     out.stride_h = stride_h;
     out.stride_w = stride_w;
-    cudaAssert(cudaMemcpy(rawp, out.rawp, h * w * sizeof(T), cudaMemcpyDeviceToHost));
+    cudaAssert(cudaMemcpy(out.rawp, rawp, h * w * sizeof(T), cudaMemcpyDeviceToHost));
   }
 
   Tensor<T> toHost() const
@@ -91,12 +99,16 @@ public:
 
   void toDevice(Tensor<T> &out) const
   {
-    assert(!on_device && out.on_device);
+    assert(out.on_device);
     assert(h == out.h && w == out.w);
+    if (on_device) {
+      out = *this;
+      return;
+    }
     out.offset = offset;
     out.stride_h = stride_h;
     out.stride_w = stride_w;
-    cudaAssert(cudaMemcpy(rawp, out.rawp, h * w * sizeof(T), cudaMemcpyHostToDevice));
+    cudaAssert(cudaMemcpy(out.rawp, rawp, h * w * sizeof(T), cudaMemcpyHostToDevice));
   }
 
   Tensor<T> toDevice() const
@@ -168,4 +180,33 @@ public:
     return ss.str();
   }
 
+  T mean() const 
+  {
+    assert(!on_device);
+    T sum = 0;
+    for (int i = 0; i < h; i++) {
+      for (int j = 0; j < w; j++) {
+        sum += Index(*this, i, j);
+      }
+    }
+    return sum/(h*w);
+  }
+
+  T range() const 
+  {
+    assert(!on_device);
+    T min, max;
+    min = max = Index(*this, 0, 0);
+    for (int i = 0; i < h; i++) {
+      for (int j = 0; j < w; j++) {
+        T e = Index(*this, i, j);
+        if (e > max) {
+          max = e;
+        } else if (e < min) {
+          min = e;
+        }
+      }
+    }
+    return max-min;
+  }
 };

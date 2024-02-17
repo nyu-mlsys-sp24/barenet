@@ -35,9 +35,10 @@ void test_elemwise(int m, int n, bool on_gpu)
     op_const_init(Y, 3.0);
 
     Tensor<float> Z{m, n, on_gpu};
+    op_const_init(Z, 10.0);
     op_add(X, Y, Z);
 
-    Tensor<float> Zref{m, n, false};
+    Tensor<float> Zref{m, n, on_gpu};
     op_const_init(Zref, 5.0);
     assert(op_allclose(Z, Zref));
 

@@ -55,11 +55,14 @@ void op_reduction_gpu(OpFunc f, const Tensor<T> &in, Tensor<T> &out, Tensor<int>
     if (in.h > out_h)
     {
       //Lab-1: add your code here to launch op_reduction_kernel_rowwise
+      //delete assert(0) when you are finished
+      assert(0);
     }
-
     else
     {
       //Lab-1: add your code here to launch op_reduction_kernel_colwise
+      //delete assert(0) when you are finished
+      assert(0);
     }
 }
 
