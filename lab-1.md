@@ -77,4 +77,30 @@ Read through the code skeleton, and fill in your code whenever you see a comment
 After finishing each file, you should be able to pass a portion of the unit test. Debug and complete that portion of the unit test 
 before moving on to the next lab file.
 
+## Saving your progress
+
+You want to save whatever progress you've made on the lab and back it up frequently so that losing your laptop does not result in the loss of your lab work.  To do so, you commit your file modifications so far and push those commits (aka back them up) to your remote respository on Github.  You do so by typing the following:
+```
+$ git commit -am "Some meaningful commit message"
+$ git push origin master
+```
+
+Do the above frequently while you work on the lab.  However, it is generally frowned upon to commit a change that does not compile.
+
+## Hand-in procedure
+
+To hand in your lab, first commit all of your modifications (see section on [Saving your progress](#Saving-your-progress). Then, make a tag to mark the latest commit point as your submittion for Lab1. Do so by typing the following:
+```
+$ git tag -a lab1 -m "submit lab1"
+```
+
+Finally, push your commit and your tag to Github by typing the following
+```
+$ git push --tags origin master
+```
+
+You should double check that your commit and your tag is correctly pushed to the Github by double checking 
+on the github webpage. See the ![Screenshot](https://news.cs.nyu.edu/~jinyang/GithubScreenshot.jpg)
+
+That's it.  Please do not delete or modify your tag after the Lab submission date. We'll make a copy of your Github repository immediately after the Lab submission date has passed.
 
