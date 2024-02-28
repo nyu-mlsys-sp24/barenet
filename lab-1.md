@@ -100,7 +100,10 @@ $ git push --tags origin master
 ```
 
 You should double check that your commit and your tag is correctly pushed to the Github by double checking 
-on the github webpage. See the ![Screenshot](https://news.cs.nyu.edu/~jinyang/GithubScreenshot.jpg)
+on the github webpage. See the Screenshot below as an example ![](https://news.cs.nyu.edu/~jinyang/GithubScreenshot.jpg)
+
+
 
 That's it.  Please do not delete or modify your tag after the Lab submission date. We'll make a copy of your Github repository immediately after the Lab submission date has passed.
+
 
