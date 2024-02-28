@@ -89,7 +89,7 @@ Do the above frequently while you work on the lab.  However, it is generally fro
 
 ## Hand-in procedure
 
-To hand in your lab, first commit all of your modifications (see section on [Saving your progress](#Saving-your-progress). Then, make a tag to mark the latest commit point as your submittion for Lab1. Do so by typing the following:
+To hand in your lab, first commit all of your modifications by following the instructions in the section on [Saving your progress](#Saving-your-progress). Second, make a tag to mark the latest commit point as your submittion for Lab1. Do so by typing the following:
 ```
 $ git tag -a lab1 -m "submit lab1"
 ```
@@ -104,6 +104,6 @@ on the github webpage. See the Screenshot below as an example ![](https://news.c
 
 
 
-That's it.  Please do not delete or modify your tag after the Lab submission date. We'll make a copy of your Github repository immediately after the Lab submission date has passed.
+That's it.  **Please do not delete or modify your tag after the Lab submission date. We'll make a copy of the tagged commit from your Github repository immediately after the Lab submission date has passed.**  After you've tagged, you can continue to commit new changes and push your new commits to Github as you move on to doing Lab-2.
 
 
