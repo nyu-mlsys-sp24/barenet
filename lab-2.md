@@ -5,12 +5,17 @@ Alas, instead of autograd, we'll perform manual gradient calculation.
 Nevertheless, this lab demonstrates to underlying abstractions of ML systems that help programmers build models out of tensor operators.
 
 ## Preliminary: Obtaining the lab code
-For this Lab, you will work in the same repository that you've worked on for Lab-1.  Firstly, you need to update your repository.
-Do the following in your lab repository.
+For this Lab, you will work in the same repository that you've worked on for Lab-1.  Firstly, click on the lab-2 assignment link given in the Campuswire. Then clone your lab2 repository:
 ```
-$ cd barenet-YourGithubUsername
-$ git 
-$ git pull
+$ git clone git@github.com:nyu-mlsys-sp24/barenet2-<YourGithubUsername>.git barenet2
+```
+
+You'll need to copy three files, `op_mm.cuh`, `op_elemwise.cuh` and `op_reduction.cuh`, from your Lab1's repository to your Lab2's respository. Suppose your Lab-1's repository is `barenet` and your Lab-2's repository is `barenet2`. Then do the following:
+```
+$ cd barenet2
+$ cp ../barenet/src/ops/op_mm.cuh src/ops/
+$ cp ../barenet/src/ops/op_elemwise.cuh src/ops/
+$ cp ../barenet/src/ops/op_reduction.cuh src/ops/
 ```
 
 ## Understanding Barenet's MLP training loop 
@@ -94,7 +99,7 @@ To train MLP in barenet, we need to first get the MNIST dataset.  There are two 
 run `mnist_mlp.ipnb` on HPC, you can download the MNIST dataset using the following command.
 
 ```
-$ cd barenet-YourGithubUsername
+$ cd barenet2
 $ python download.py
 ```
 
