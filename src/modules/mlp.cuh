@@ -70,18 +70,6 @@ public:
     //Invoke the backward function of each linear layer and Relu from the last one to the first one.
     void backward(const Tensor<T> &in, const Tensor<T> &d_out, Tensor<T> &d_in)
     {
-        for (int i = layers.size() - 1; i >= 0; i--)
-        {
-            const Tensor<T> &x = (i > 0) ? activ[i - 1] : in;
-            const Tensor<T> &d_y = (i < layers.size() - 1) ? d_activ[i] : d_out;
-            Tensor<T> &d_x = (i > 0) ? d_activ[i - 1] : d_in;
-            layers[i].backward(x, d_y, d_x);
-
-            if (i > 0)
-            {
-                op_relu_back(x, d_x, d_x);
-                d_activ[i - 1] = d_x;
-            }
-        }
+       //Lab-2: add your code here
     }
 };

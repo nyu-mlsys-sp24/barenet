@@ -4,6 +4,7 @@
 #include "ops/op_mm.cuh"
 #include "ops/op_elemwise.cuh"
 #include "ops/op_reduction.cuh"
+#include "ops/op_cross_entropy.cuh"
 
 unsigned long long randgen_seed = 0;
 
@@ -35,10 +36,9 @@ void test_elemwise(int m, int n, bool on_gpu)
     op_const_init(Y, 3.0);
 
     Tensor<float> Z{m, n, on_gpu};
-    op_const_init(Z, 10.0);
     op_add(X, Y, Z);
 
-    Tensor<float> Zref{m, n, on_gpu};
+    Tensor<float> Zref{m, n, false};
     op_const_init(Zref, 5.0);
     assert(op_allclose(Z, Zref));
 
@@ -86,6 +86,71 @@ void test_elemwise(int m, int n, bool on_gpu)
     assert(op_allclose(A, Aref));
 
     std::cout << "op_sgd passed..." << std::endl;
+
+}
+
+bool is_close_enough(float a, float b) {
+    if (std::abs(a - b) > 0.0001) {
+        return false;
+    } else {
+        return true;
+    }
+}
+void assert_all_close_enough(Tensor<float> t, std::vector<float> v)
+{
+    for (int i = 0; i < t.h; i++) {
+        for (int j = 0; j < t.w; j++) {
+            assert(is_close_enough(Index(t, i, j), v[i*t.w+j]));
+        }
+    }
+}
+
+void
+test_op_cross_entropy_loss(bool on_gpu)
+{
+    Tensor<float> logits_host{2,3};
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 3; j++) {
+            Index(logits_host, i, j) = i*3+j;
+        }
+    }
+    Tensor<char> targets{2,1};
+    for (int i = 0; i < 2; i++) {        
+        Index(targets, i, 0) = i;
+    }
+    Tensor<float> logits = logits_host;
+    if (on_gpu) {
+        logits = logits.toDevice();
+        targets = targets.toDevice();
+    }
+    Tensor<float> d_logits{2,3, on_gpu};
+    float loss = op_cross_entropy_loss(logits, targets, d_logits);
+    //std::cout << "loss=" << loss << std::endl;
+    assert(is_close_enough(loss, 1.9076));
+
+    Tensor<float> d_logits_host = d_logits;
+    if (on_gpu) {
+        d_logits_host = d_logits.toHost();
+    }
+    std::vector<float> d_logits_ref{-0.4550, 0.1224, 0.3326, 0.0450, -0.3776, 0.3326};
+    assert_all_close_enough(d_logits_host, d_logits_ref);
+
+    //test if the save version is implemented
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 3; j++) {
+            Index(logits_host, i, j) += 100000;
+        }
+    }
+    if (on_gpu) {
+        logits = logits_host.toDevice();
+    }
+    loss = op_cross_entropy_loss(logits, targets, d_logits);
+    if (on_gpu) {
+        d_logits_host = d_logits.toHost();
+    }
+    assert_all_close_enough(d_logits_host, d_logits_ref);
+
+    std::cout << "op_cross_entropy_loss passed..." << std::endl;
 
 }
 
@@ -209,6 +274,7 @@ int main(int argc, char *argv[])
     test_elemwise(test_m, test_n, test_gpu);
     test_matmul(test_m, test_n, test_k, test_gpu);
     test_reduction(test_m, test_n, test_gpu);
+    test_op_cross_entropy_loss(test_gpu);
     std::cout << "All tests completed successfully!" << std::endl;
     return 0;
 }
